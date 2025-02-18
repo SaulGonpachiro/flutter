@@ -1,14 +1,15 @@
 import 'dart:convert';
-import 'package:flutter_appvet/models/Pet.dart';
+import 'package:Paw_authority/models/Pet.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_appvet/models/Pet.dart';
+import 'package:Paw_authority/models/Pet.dart';
 
 class PetService extends ChangeNotifier {
   final String baseURL =
       "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/";
 
-  String getPetsUrl() => "$baseURL/pets.json";
+  String getPetsUrl() =>
+      "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/pets.json";
 
   //String getPetUrl(String id) => "$baseURL/pets/$id.json";
 
@@ -38,13 +39,44 @@ class PetService extends ChangeNotifier {
     }
   }
 
+  Future<Pet?> getPetById(String petId) async {
+    final url = "$baseURL/pet/$petId.json"; //URL específica para cada mascota
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic>? data = json.decode(response.body);
+
+      if (data == null) return null; //Si no existe la mascota
+
+      return Pet.fromJson(data); // Convertir JSON a objeto Pet
+    } else {
+      throw Exception("Error al obtener la mascota con ID: $petId");
+    }
+  }
+
   Future<void> createPet(Pet pet) async {
+    print("AGREGAR MASCOTA");
     final response = await http.post(
-      Uri.parse(baseURL),
+      Uri.parse(getPetsUrl()),
       body: json.encode(pet.toJson()),
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      _pets.add(pet);
+      final responseData = json.decode(response.body);
+      final String firebaseId = responseData["name"]; //ID GENERADO POR FIREBASE
+
+      print("FIREBASE ID: ${firebaseId}");
+      final petConId = Pet(
+        id: firebaseId, // Asigna el ID de Firebase
+        chip: pet.chip,
+        tipo: pet.tipo,
+        raza: pet.raza,
+        nombre: pet.nombre,
+        peso: pet.peso,
+        idPropietario: pet.idPropietario,
+        fechaNacimiento: pet.fechaNacimiento,
+        observaciones: pet.observaciones,
+      );
+      _pets.add(petConId);
       notifyListeners();
     } else {
       throw Exception("Error al crear la mascota");
@@ -53,7 +85,7 @@ class PetService extends ChangeNotifier {
 
   Future<void> updatePet(Pet pet) async {
     final url =
-        "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/Pets/${pet.id}.json";
+        "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/pets/${pet.id}.json";
     final response = await http.patch(
       Uri.parse(url),
       body: json.encode(pet.toJson()),
@@ -71,7 +103,7 @@ class PetService extends ChangeNotifier {
 
   Future<void> deletePet(String id) async {
     final url =
-        "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/Pets/$id.json";
+        "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/pets/$id.json";
     final response = await http.delete(Uri.parse(url));
     if (response.statusCode == 200) {
       _pets.removeWhere((p) => p.id == id);

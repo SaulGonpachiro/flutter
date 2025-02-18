@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appvet/UI/background_image.dart';
+import 'package:Paw_authority/UI/background_image.dart';
 
 class LogoWithTitle extends StatelessWidget {
   final String logoImage;
@@ -19,7 +19,6 @@ class LogoWithTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Logo como imagen de fondo
         SizedBox(
           width: 100,
           height: 100,
@@ -27,7 +26,6 @@ class LogoWithTitle extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        // Título
         Text(
           title,
           style: titleStyle ??

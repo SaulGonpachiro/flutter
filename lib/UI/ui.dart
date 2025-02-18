@@ -1,3 +1,3 @@
-export 'package:flutter_appvet/UI/background_image.dart';
-export 'package:flutter_appvet/UI/custom_text_input.dart';
-export 'package:flutter_appvet/UI/button.dart';
+export 'package:Paw_authority/UI/background_image.dart';
+export 'package:Paw_authority/UI/custom_text_input.dart';
+export 'package:Paw_authority/UI/button.dart';

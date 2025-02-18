@@ -1,9 +1,10 @@
-import 'package:flutter_appvet/providers/pet_provider.dart';
-import 'package:flutter_appvet/services/pets_service.dart';
+import 'package:Paw_authority/providers/pet_provider.dart';
+import 'package:Paw_authority/services/pet_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appvet/UI/custom_text_input.dart';
+import 'package:Paw_authority/UI/custom_text_input.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_appvet/models/Pet.dart';
+import 'package:Paw_authority/models/Pet.dart';
+
 
 class PetInsertForm extends StatefulWidget {
   const PetInsertForm({super.key});
@@ -17,21 +18,30 @@ class _PetInsertFormState extends State<PetInsertForm> {
 
   Future<void> _addPet(BuildContext context) async {
     final petProvider = Provider.of<PetProvider>(context, listen: false);
+    final petService = Provider.of<PetService>(context, listen: false);
 
-    final petsService = Provider.of<PetsService>(context, listen: false);
-
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save(); // activa el método onSaved
-      final nuevaMascota = Pet(
-        id: "", // Firebase asignará un ID automáticamente
-        chip: petProvider.chip,
-        tipo: petProvider.tipo,
-        raza: petProvider.raza,
-        nombre: petProvider.nombre,
-        peso: petProvider.peso,
-        idPropietario: petProvider.idPropietario,
-        fechaNacimiento: petProvider.fechaNacimiento,
-        observaciones: petProvider.observaciones,
+    _formKey.currentState!.save(); // activa el método onSaved
+    final nuevaMascota = Pet(
+      id: "", // Firebase asignará un ID automáticamente
+      chip: petProvider.chip,
+      tipo: petProvider.tipo,
+      raza: petProvider.raza,
+      nombre: petProvider.nombre,
+      peso: petProvider.peso,
+      idPropietario: petProvider.idPropietario,
+      fechaNacimiento: petProvider.fechaNacimiento,
+      observaciones: petProvider.observaciones,
+    );
+    try {
+      await petService
+          .createPet(nuevaMascota); // Llama al servicio para subir a Firebase
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Mascota guardada exitosamente")),
+      );
+      Navigator.pop(context); // Regresa a la pantalla anterior
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error al guardar la mascota: $e")),
       );
     }
   }
@@ -47,10 +57,6 @@ class _PetInsertFormState extends State<PetInsertForm> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  /*
-  int idPropietario;
-  DateTime fechaNacimiento;
-  String observaciones; */
                   CustomTextInput(
                       controller: TextEditingController(),
                       label: "Propietario",
@@ -58,7 +64,7 @@ class _PetInsertFormState extends State<PetInsertForm> {
                       onSaved: (value) =>
                           petProvider.setIdPropietario(value ?? ""),
                       validator: (value) => null),
-                  SizedBox(
+                  const SizedBox(
                     height: 10.0,
                   ),
                   CustomTextInput(
@@ -114,6 +120,16 @@ class _PetInsertFormState extends State<PetInsertForm> {
                       keyboardType: TextInputType.number,
                       hint: "Peso de la mascota",
                       onSaved: (value) => petProvider.setPeso(value ?? ""),
+                      validator: (value) => null),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  CustomTextInput(
+                      controller: TextEditingController(),
+                      label: "Observaciones",
+                      hint: "Introduce las observaciones",
+                      onSaved: (value) =>
+                          petProvider.setObservaciones(value ?? ""),
                       validator: (value) => null),
                   SizedBox(
                     height: 10.0,

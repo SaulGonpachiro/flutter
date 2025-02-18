@@ -1,9 +1,10 @@
+import 'package:Paw_authority/screens/PetsScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appvet/UI/background_image.dart';
-import 'package:flutter_appvet/screens/screens.dart';
-import 'package:flutter_appvet/UI/LogoWithTitle.dart';
-import 'package:flutter_appvet/UI/custom_text_input.dart';
-import 'package:flutter_appvet/UI/button.dart';
+import 'package:Paw_authority/UI/background_image.dart';
+import 'package:Paw_authority/screens/screens.dart';
+import 'package:Paw_authority/UI/LogoWithTitle.dart';
+import 'package:Paw_authority/UI/custom_text_input.dart';
+import 'package:Paw_authority/UI/button.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _userController = TextEditingController();
@@ -71,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => Petsscreen(),
+                                      builder: (context) => PetsScreen(),
                                     ),
                                   );
                                 } else {

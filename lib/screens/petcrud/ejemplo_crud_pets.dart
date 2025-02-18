@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appvet/models/Pet.dart';
-import 'package:flutter_appvet/services/pets_service.dart';
-import 'package:flutter_appvet/providers/providers.dart';
+import 'package:Paw_authority/models/Pet.dart';
+import 'package:Paw_authority/services/pet_service.dart';
+import 'package:Paw_authority/providers/providers.dart';
 import 'package:provider/provider.dart';
 
 class EjemploCrudPets extends StatefulWidget {
@@ -14,52 +14,62 @@ class EjemploCrudPets extends StatefulWidget {
 class _EjemploCrudPetsState extends State<EjemploCrudPets> {
   List<Pet> pets = [];
 
-  /*Future<void> _obtenerMascotas() async {
-    print("LANZAR PETICIÓN");
-    await widget.petService.fetchPets();
-    print("DESCARGA REALIZADA");
+  @override
+  void initState() {
+    super.initState();
+    _obtenerMascotas();
+  }
 
-    setState(() {
-      pets = widget.petService.pets;
-    });
-  }*/
+  Future<void> _obtenerMascotas() async {
+    final petService = Provider.of<PetService>(context, listen: false);
+    await petService.fetchPets();
+    setState(() {}); // Refresca la UI después de obtener los datos
+  }
 
   @override
   Widget build(BuildContext context) {
-    final petService = Provider.of<PetsService>(context);
+    final petService = Provider.of<PetService>(context, listen: false);
 
     return Scaffold(
       body: Column(
         children: [
-          ElevatedButton(onPressed: () {}, child: Text("Añadir Mascota")),
           Expanded(
-              child: FutureBuilder<void>(
-                  //future: _obtenerMascotas(),
-                  future: petService.fetchPets(),
-                  builder: (context, snapshot) {
-                    return ListView.builder(
-                        itemCount: petService.pets.length,
-                        itemBuilder: (context, index) {
-                          final pet = petService.pets[index];
-                          return ListTile(
-                            title: Text(pet.nombre),
-                            subtitle: Text(pet.raza),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () => () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () => () {},
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                  }))
+            child: ListView.builder(
+              itemCount: petService.pets.length,
+              itemBuilder: (context, index) {
+                final pet = petService.pets[index];
+                return ListTile(
+                  title: Text(pet.nombre),
+                  subtitle: Text(pet.raza),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () async {
+                          final Pet? p = await petService.getPetById(pet.id);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          await petService.deletePet(pet.id);
+                          _obtenerMascotas(); // Vuelve a cargar la lista tras eliminar
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/petinsert');
+              _obtenerMascotas(); // Refresca la lista tras añadir una mascota
+            },
+            child: Text("Añadir Mascota"),
+          ),
         ],
       ),
     );

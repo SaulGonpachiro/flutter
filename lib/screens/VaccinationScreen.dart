@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Vaccinationscreen extends StatelessWidget {
-  const Vaccinationscreen({super.key});
+class VaccinationScreen extends StatelessWidget {
+  const VaccinationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(child: Text("VACUNAS"));
   }
 }
