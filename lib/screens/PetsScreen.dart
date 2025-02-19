@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:Paw_authority/UI/background_image.dart';
-import 'package:Paw_authority/screens/petcrud/ejemplo_crud_pets.dart'; // Asegúrate de importar la pantalla de mascotas
-import 'package:Paw_authority/UI/background_image.dart';
 
 class PetsScreen extends StatelessWidget {
   const PetsScreen({super.key});
@@ -11,37 +9,36 @@ class PetsScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Imagen de fondo
           const BackgroundImage(imagen: "huron.png"),
 
           // Contenido centrado
           Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start, // Título en la parte superior
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Título principal
                 const Padding(
-                  padding: EdgeInsets.only(top: 40), // Espacio en la parte superior
+                  padding: EdgeInsets.only(top: 30),
                   child: Text(
                     'Bienvenido a "Respect My Paw-thority!"',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.greenAccent, // Color greenAccent
-                      fontSize: 32, // Tamaño más grande
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
                 ),
-                const SizedBox(height: 40), // Espacio entre el título y los botones
+                const SizedBox(height: 20),
 
-                // Botones en horizontal
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                // Contenedor flexible con distribución automática
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 15, // Espacio horizontal entre imágenes
+                  runSpacing: 15, // Espacio vertical entre imágenes
                   children: [
                     _buildImageButton(context, "Clientes", "assets/images/clientes.png", '/clients'),
-                    const SizedBox(width: 20), // Espacio entre botones
                     _buildImageButton(context, "Mascotas", "assets/images/mascotas.png", '/ejemplo'),
-                    const SizedBox(width: 20), // Espacio entre botones
                     _buildImageButton(context, "Citas", "assets/images/citas.png", '/appointments'),
                   ],
                 ),
@@ -55,29 +52,26 @@ class PetsScreen extends StatelessWidget {
 
   Widget _buildImageButton(BuildContext context, String title, String imagePath, String route) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // Título arriba de la imagen
         Text(
           title,
+          textAlign: TextAlign.center,
           style: const TextStyle(
-            color: Colors.greenAccent, // Color greenAccent
-            fontSize: 24, // Tamaño más grande
+            color: Color.fromARGB(255, 255, 255, 255),
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10), // Espacio entre el título y la imagen
-
-        // Imagen con GestureDetector
+        const SizedBox(height: 8),
         GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, route);
-          },
+          onTap: () => Navigator.pushNamed(context, route),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10), // Bordes redondeados
+            borderRadius: BorderRadius.circular(10),
             child: Image.asset(
               imagePath,
-              width: 400, // Imágenes más grandes
-              height: 400,
+              width: 120, // Tamaño más pequeño para que entren sin scroll
+              height: 100,
               fit: BoxFit.cover,
             ),
           ),

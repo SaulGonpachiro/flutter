@@ -31,7 +31,7 @@ class PetService extends ChangeNotifier {
         }).toList();
 
         print(
-            "Mascotas cargadas: $_pets"); // 👀 Verifica que la lista no esté vacía
+            "Mascotas cargadas: $_pets"); 
       }
       notifyListeners();
     } else {
