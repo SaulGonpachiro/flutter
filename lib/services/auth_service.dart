@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 
 class AuthService extends ChangeNotifier {
-  final String _firebaseToken = 'AIzaSyCtmpnjxEAkoQLO68xAkboGo_4oUSR_7yA';
+  final String _firebaseToken = 'AIzaSyAB7ojJmGT7PKld7NjKKJeKlQBHndRhNEA';
 
 //LOGIN
   Future<String?> login(String email, String password) async {

@@ -2,16 +2,12 @@ import 'dart:convert';
 import 'package:Paw_authority/models/Pet.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:Paw_authority/models/Pet.dart';
 
 class PetService extends ChangeNotifier {
   final String baseURL =
-      "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/";
+      "https://app-vet-95e2b-default-rtdb.europe-west1.firebasedatabase.app";
 
-  String getPetsUrl() =>
-      "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/pets.json";
-
-  //String getPetUrl(String id) => "$baseURL/pets/$id.json";
+  String getPetsUrl() => "$baseURL/pets.json";
 
   List<Pet> _pets = [];
   List<Pet> get pets => _pets;
@@ -20,18 +16,19 @@ class PetService extends ChangeNotifier {
     final response = await http.get(Uri.parse(getPetsUrl()));
     if (response.statusCode == 200 && response.body.isNotEmpty) {
       final Map<String, dynamic> data = json.decode(response.body);
-
+      print("CARGA DE DATOS");
       if (data.isEmpty) {
-        print("No hay mascotas en la base de datos.");
+        print("MASCOTAS VACÍO");
       } else {
+        print("CONVERTIR VALORES");
         _pets = data.entries.map((e) {
           final petData = e.value as Map<String, dynamic>;
+          print(petData["nombre"]);
           petData["id"] = e.key;
           return Pet.fromJson(petData);
         }).toList();
 
-        print(
-            "Mascotas cargadas: $_pets"); 
+        print("Mascotas cargadas: $_pets");
       }
       notifyListeners();
     } else {
@@ -40,33 +37,29 @@ class PetService extends ChangeNotifier {
   }
 
   Future<Pet?> getPetById(String petId) async {
-    final url = "$baseURL/pet/$petId.json"; //URL específica para cada mascota
+    final url = "$baseURL/pets/$petId.json";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic>? data = json.decode(response.body);
-
-      if (data == null) return null; //Si no existe la mascota
-
-      return Pet.fromJson(data); // Convertir JSON a objeto Pet
+      if (data == null) return null;
+      return Pet.fromJson(data);
     } else {
       throw Exception("Error al obtener la mascota con ID: $petId");
     }
   }
 
   Future<void> createPet(Pet pet) async {
-    print("AGREGAR MASCOTA");
     final response = await http.post(
       Uri.parse(getPetsUrl()),
       body: json.encode(pet.toJson()),
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final responseData = json.decode(response.body);
-      final String firebaseId = responseData["name"]; //ID GENERADO POR FIREBASE
+      final String firebaseId = responseData["name"];
 
-      print("FIREBASE ID: ${firebaseId}");
       final petConId = Pet(
-        id: firebaseId, // Asigna el ID de Firebase
+        id: firebaseId,
         chip: pet.chip,
         tipo: pet.tipo,
         raza: pet.raza,
@@ -84,8 +77,7 @@ class PetService extends ChangeNotifier {
   }
 
   Future<void> updatePet(Pet pet) async {
-    final url =
-        "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/pets/${pet.id}.json";
+    final url = "$baseURL/pets/${pet.id}.json";
     final response = await http.patch(
       Uri.parse(url),
       body: json.encode(pet.toJson()),
@@ -102,8 +94,7 @@ class PetService extends ChangeNotifier {
   }
 
   Future<void> deletePet(String id) async {
-    final url =
-        "https://app-vet-1d0c2-default-rtdb.europe-west1.firebasedatabase.app/pets/$id.json";
+    final url = "$baseURL/pets/$id.json";
     final response = await http.delete(Uri.parse(url));
     if (response.statusCode == 200) {
       _pets.removeWhere((p) => p.id == id);

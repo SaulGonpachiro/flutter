@@ -6,10 +6,15 @@ class BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-        child: Image.asset(
-      "assets/images/${imagen}",
-      fit: BoxFit.cover,
-    ));
+    return Container(
+      width: double.infinity, // Ocupa todo el ancho
+      height: double.infinity, // Ocupa todo el alto
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/$imagen"), // Ruta de la imagen
+          fit: BoxFit.cover, // Cubre toda la pantalla
+        ),
+      ),
+    );
   }
 }

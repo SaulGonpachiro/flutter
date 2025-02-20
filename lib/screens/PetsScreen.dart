@@ -7,8 +7,10 @@ class PetsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent, // Fondo transparente
       body: Stack(
         children: [
+          // Imagen de fondo que cubre toda la pantalla
           const BackgroundImage(imagen: "huron.png"),
 
           // Contenido centrado
@@ -16,13 +18,14 @@ class PetsScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Título
                 const Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 10),
                   child: Text(
                     'Bienvenido a "Respect My Paw-thority!"',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: Color.fromARGB(255, 0, 0, 0), // Texto en blanco para mejor contraste
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
@@ -31,15 +34,15 @@ class PetsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // Contenedor flexible con distribución automática
+                // Botones con imágenes
                 Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 15, // Espacio horizontal entre imágenes
                   runSpacing: 15, // Espacio vertical entre imágenes
                   children: [
-                    _buildImageButton(context, "Clientes", "assets/images/clientes.png", '/clients'),
+                    _buildImageButton(context, "Clientes", "assets/images/clientes.png", '/crudclientes'),
                     _buildImageButton(context, "Mascotas", "assets/images/mascotas.png", '/ejemplo'),
-                    _buildImageButton(context, "Citas", "assets/images/citas.png", '/appointments'),
+                    _buildImageButton(context, "Citas", "assets/images/citas.png", '/crudconsultas'),
                   ],
                 ),
               ],
@@ -58,7 +61,7 @@ class PetsScreen extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromARGB(255, 0, 0, 0), // Texto en blanco para mejor contraste
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -66,13 +69,19 @@ class PetsScreen extends StatelessWidget {
         const SizedBox(height: 8),
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, route),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              imagePath,
-              width: 120, // Tamaño más pequeño para que entren sin scroll
-              height: 100,
-              fit: BoxFit.cover,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color.fromARGB(255, 255, 255, 255), width: 4), // Borde blanco
+              borderRadius: BorderRadius.circular(10), // Bordes redondeados
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10), // Bordes redondeados para la imagen
+              child: Image.asset(
+                imagePath,
+                width: 120, // Tamaño de la imagen
+                height: 100,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

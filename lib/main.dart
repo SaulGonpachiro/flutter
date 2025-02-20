@@ -1,3 +1,5 @@
+import 'package:Paw_authority/screens/petcrud/crud_clientes.dart';
+import 'package:Paw_authority/screens/petcrud/crud_consultas.dart';
 import 'package:flutter/material.dart';
 import 'package:Paw_authority/providers/pet_provider.dart';
 import 'package:Paw_authority/screens/LoginScreen.dart';
@@ -35,13 +37,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'App Vet',
-      initialRoute: '/login',
+      initialRoute: '/pets',
       routes: {
         '/login': (context) => LoginScreen(),
         '/pets': (context) => PetsScreen(),
         '/vaccination': (context) => VaccinationScreen(),
         '/ejemplo': (context) => EjemploCrudPets(),
-        '/petinsert': (context) => PetInsertForm()
+        '/petinsert': (context) => PetInsertForm(),
+        '/crudclientes': (context) => Clientes(),
+        '/crudconsultas': (context) => Consultas()
       },
     );
   }

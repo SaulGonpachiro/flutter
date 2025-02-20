@@ -6,19 +6,18 @@ import 'package:Paw_authority/services/pet_service.dart';
 import 'package:Paw_authority/providers/providers.dart';
 import 'package:provider/provider.dart';
 import 'package:Paw_authority/UI/background_image.dart';
+import 'package:Paw_authority/models/Pet.dart';
 
-
-class EjemploCrudPets extends StatefulWidget {
-  const EjemploCrudPets({super.key});
+class Consultas extends StatefulWidget {
+  const Consultas({super.key});
 
   @override
-  State<EjemploCrudPets> createState() => _EjemploCrudPetsState();
+  State<Consultas> createState() => _ConsultasState();
 }
 
-class _EjemploCrudPetsState extends State<EjemploCrudPets> {
+class _ConsultasState extends State<Consultas> {
   final Random _random = Random();
   final Map<String, Color> _petColors = {}; // Cambiamos la clave de int a String
-
 
   Color _getRandomColor() {
     return Color.fromARGB(
