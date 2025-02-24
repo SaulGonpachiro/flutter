@@ -1,5 +1,12 @@
+import 'package:Paw_authority/models/Consultas.dart';
+import 'package:Paw_authority/providers/client_provider.dart';
+import 'package:Paw_authority/providers/consulta_provider.dart';
+import 'package:Paw_authority/screens/petcrud/cliente_insertform.dart';
+import 'package:Paw_authority/screens/petcrud/consulta_insertform.dart';
 import 'package:Paw_authority/screens/petcrud/crud_clientes.dart';
 import 'package:Paw_authority/screens/petcrud/crud_consultas.dart';
+import 'package:Paw_authority/services/client_service.dart';
+import 'package:Paw_authority/services/consulta_service.dart';
 import 'package:flutter/material.dart';
 import 'package:Paw_authority/providers/pet_provider.dart';
 import 'package:Paw_authority/screens/LoginScreen.dart';
@@ -16,6 +23,10 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => PetService()),
         ChangeNotifierProvider(create: (_) => PetProvider()),
+        ChangeNotifierProvider(create: (_) => ClientService()),
+        ChangeNotifierProvider(create: (_) => ClientProvider()),
+        ChangeNotifierProvider(create: (_) => ConsultaService()),
+        ChangeNotifierProvider(create: (_) => ConsultaProvider()),
       ],
       child: MyApp(),
     ),
@@ -37,15 +48,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'App Vet',
-      initialRoute: '/pets',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
         '/pets': (context) => PetsScreen(),
         '/vaccination': (context) => VaccinationScreen(),
-        '/ejemplo': (context) => EjemploCrudPets(),
+        '/crudpet': (context) => EjemploCrudPets(),
         '/petinsert': (context) => PetInsertForm(),
         '/crudclientes': (context) => Clientes(),
-        '/crudconsultas': (context) => Consultas()
+        '/clientinsert': (context) => ClientInsertForm(),
+        '/consultatinsert': (context) => ConsultaInsertForm(),
+        '/crudconsultas': (context) => ConsultaCrud()
       },
     );
   }

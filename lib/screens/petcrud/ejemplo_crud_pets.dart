@@ -184,6 +184,13 @@ class _EjemploCrudPetsState extends State<EjemploCrudPets> {
                 },
                 child: Text("Añadir Mascota"),
               ),
+              SizedBox(height: 20), // Espaciado antes del botón de volver
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Volver a la pantalla anterior
+                },
+                child: Text("Volver"),
+              ),
             ],
           ),
         ],

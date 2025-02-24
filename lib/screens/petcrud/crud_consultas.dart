@@ -1,23 +1,22 @@
-import 'package:Paw_authority/screens/petcrud/edit_pet_screen.dart';
-import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:Paw_authority/models/Pet.dart';
-import 'package:Paw_authority/services/pet_service.dart';
-import 'package:Paw_authority/providers/providers.dart';
-import 'package:provider/provider.dart';
-import 'package:Paw_authority/UI/background_image.dart';
-import 'package:Paw_authority/models/Pet.dart';
 
-class Consultas extends StatefulWidget {
-  const Consultas({super.key});
+import 'package:Paw_authority/screens/petcrud/edit_consultas.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:Paw_authority/models/Consultas.dart';
+import 'package:Paw_authority/services/consulta_service.dart';
+import 'package:Paw_authority/UI/background_image.dart';
+
+class ConsultaCrud extends StatefulWidget {
+  const ConsultaCrud({super.key});
 
   @override
-  State<Consultas> createState() => _ConsultasState();
+  State<ConsultaCrud> createState() => _ConsultaCrudState();
 }
 
-class _ConsultasState extends State<Consultas> {
+class _ConsultaCrudState extends State<ConsultaCrud> {
   final Random _random = Random();
-  final Map<String, Color> _petColors = {}; // Cambiamos la clave de int a String
+  final Map<String, Color> _consultaColors = {};
 
   Color _getRandomColor() {
     return Color.fromARGB(
@@ -31,43 +30,50 @@ class _ConsultasState extends State<Consultas> {
   @override
   void initState() {
     super.initState();
-    _obtenerMascotas();
+    _obtenerConsultas(); // Obtiene las consultas al iniciar
   }
 
-  Future<void> _obtenerMascotas() async {
-    final petService = Provider.of<PetService>(context, listen: false);
-    await petService.fetchPets();
+  Future<void> _obtenerConsultas() async {
+    final consultaService = Provider.of<ConsultaService>(context, listen: false);
+    await consultaService.fetchConsultas();
 
-    // Asigna colores a las mascotas si no están ya asignados
-    for (var pet in petService.pets) {
-    if (!_petColors.containsKey(pet.id)) {
-      _petColors[pet.id] = _getRandomColor();
-    }
+    // Asigna colores a las consultas si no están ya asignados
+    for (var consulta in consultaService.consultas) {
+      if (!_consultaColors.containsKey(consulta.id)) {
+        _consultaColors[consulta.id] = _getRandomColor();
+      }
     }
 
     setState(() {}); // Refresca la UI después de obtener los datos
   }
 
-  // Función para mostrar la información completa de la mascota
-  void _mostrarInformacionCompleta(Pet pet) {
+  // Función para mostrar la pantalla de edición de una consulta
+  void _editarConsulta(Consulta consulta) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditConsultaScreen(consulta: consulta), // Navega a la pantalla de edición
+      ),
+    );
+  }
+
+  // Función para mostrar la información completa de una consulta
+  void _mostrarInformacionCompleta(Consulta consulta) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(pet.nombre),
+          title: Text("Consulta: ${consulta.id}"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Raza: ${pet.id}"),
-              Text("Edad: ${pet.chip}"),
-              Text("Tipo: ${pet.tipo}"),
-              Text("Raza: ${pet.raza}"),
-              Text("Nombre: ${pet.nombre}"),
-              Text("Peso: ${pet.peso}"),
-              Text("Propietario: ${pet.idPropietario}"),
-              Text("Fecha Nacimiento: ${pet.fechaNacimiento}"),
-              Text("Observaciones: ${pet.observaciones}"),
+              Text("Fecha: ${consulta.fecha.toLocal()}"),
+              Text("Diagnóstico: ${consulta.diagnostico}"),
+              Text("Tratamiento: ${consulta.tratamiento}"),
+              Text("Observaciones: ${consulta.observaciones}"),
+              Text("ID Mascota: ${consulta.idMascota}"),
+              Text("ID Veterinario: ${consulta.idVeterinario}"),
             ],
           ),
           actions: [
@@ -85,62 +91,57 @@ class _ConsultasState extends State<Consultas> {
 
   @override
   Widget build(BuildContext context) {
-    final petService = Provider.of<PetService>(context);
-    // Obtener el ancho de la pantalla
+    final consultaService = Provider.of<ConsultaService>(context);
     double screenWidth = MediaQuery.of(context).size.width;
-
-    // Ajustar el tamaño máximo de cada ítem según el tamaño de la pantalla
     double maxCrossAxisExtent = screenWidth < 600 ? 150 : 200;
 
     return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
-            child: const BackgroundImage(imagen: "huron.png"), // Imagen de fondo
+            child: const BackgroundImage(imagen: "huron.png"), // Cambiar por tu imagen
           ),
           Column(
             children: [
               Expanded(
                 child: GridView.builder(
-                  padding: EdgeInsets.all(2), // Padding mínimo
+                  padding: EdgeInsets.all(2),
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: maxCrossAxisExtent, // Tamaño ajustado dinámicamente
-                    crossAxisSpacing: 2, // Espaciado mínimo
-                    mainAxisSpacing: 2, // Espaciado mínimo
-                    childAspectRatio: 1, // Relación de aspecto cuadrada
+                    maxCrossAxisExtent: maxCrossAxisExtent,
+                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 2,
+                    childAspectRatio: 1,
                   ),
-                  itemCount: petService.pets.length,
+                  itemCount: consultaService.consultas.length,
                   itemBuilder: (context, index) {
-                    final pet = petService.pets[index];
-                    final color = _petColors[pet.id] ?? Colors.grey;
+                    final consulta = consultaService.consultas[index];
+                    final color = _consultaColors[consulta.id] ?? Colors.grey;
 
                     return GestureDetector(
                       onTap: () {
-                        _mostrarInformacionCompleta(pet); // Muestra la información al hacer clic
+                        _mostrarInformacionCompleta(consulta); // Muestra la información
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: color, // Usa el color almacenado
+                          color: color,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        padding: EdgeInsets.all(4), // Padding interno pequeño
+                        padding: EdgeInsets.all(4),
                         child: Stack(
                           children: [
-                            // Nombre de la mascota
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                pet.nombre,
+                                "Consulta: ${consulta.id}",
                                 style: TextStyle(
-                                  fontSize: 12, // Fuente más grande
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
-                                maxLines: 1, // Evita que el texto ocupe más de una línea
-                                overflow: TextOverflow.ellipsis, // Puntos suspensivos si el texto es largo
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            // Botones de editar y eliminar
                             Align(
                               alignment: Alignment.bottomRight,
                               child: Row(
@@ -150,20 +151,15 @@ class _ConsultasState extends State<Consultas> {
                                     icon: Icon(Icons.edit, color: Colors.white, size: 16),
                                     padding: EdgeInsets.zero,
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => EditPetScreen(pet: pet),
-                                        ),
-                                      );
+                                      _editarConsulta(consulta); // Llama a la función de edición
                                     },
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.delete, color: Colors.white, size: 16), // Ícono más grande
-                                    padding: EdgeInsets.zero, // Sin padding
+                                    icon: Icon(Icons.delete, color: Colors.white, size: 16),
+                                    padding: EdgeInsets.zero,
                                     onPressed: () async {
-                                      await petService.deletePet(pet.id);
-                                      _obtenerMascotas(); // Refresca la lista tras eliminar
+                                      await consultaService.deleteConsulta(consulta.id);
+                                      _obtenerConsultas(); // Refresca la lista
                                     },
                                   ),
                                 ],
@@ -178,10 +174,17 @@ class _ConsultasState extends State<Consultas> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  await Navigator.pushNamed(context, '/petinsert');
-                  _obtenerMascotas(); // Refresca la lista tras añadir una mascota
+                  await Navigator.pushNamed(context, '/consultatinsert'); // Asegúrate de tener esta ruta
+                  _obtenerConsultas(); // Refresca la lista después de añadir una consulta
                 },
-                child: Text("Añadir Mascota"),
+                child: Text("Añadir Consulta"),
+              ),
+              SizedBox(height: 20), // Espaciado antes del botón de volver
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Volver a la pantalla anterior
+                },
+                child: Text("Volver"),
               ),
             ],
           ),

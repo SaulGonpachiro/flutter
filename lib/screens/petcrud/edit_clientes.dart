@@ -85,7 +85,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                 width: MediaQuery.of(context).size.width * 0.9, // Ancho del 90% de la pantalla
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.greenAccent.withOpacity(0.7), // Fondo verde semitransparente
+                  color: Colors.blueAccent.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(10), // Bordes redondeados
                 ),
                 child: Column(

@@ -41,7 +41,7 @@ class PetsScreen extends StatelessWidget {
                   runSpacing: 15, // Espacio vertical entre imágenes
                   children: [
                     _buildImageButton(context, "Clientes", "assets/images/clientes.png", '/crudclientes'),
-                    _buildImageButton(context, "Mascotas", "assets/images/mascotas.png", '/ejemplo'),
+                    _buildImageButton(context, "Mascotas", "assets/images/mascotas.png", '/crudpet'),
                     _buildImageButton(context, "Citas", "assets/images/citas.png", '/crudconsultas'),
                   ],
                 ),

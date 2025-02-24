@@ -1,12 +1,10 @@
 import 'dart:math';
-
 import 'package:Paw_authority/screens/petcrud/edit_clientes.dart';
 import 'package:flutter/material.dart';
-import 'package:Paw_authority/models/Client.dart'; // Importa la clase Client
-import 'package:Paw_authority/services/client_service.dart'; // Importa el servicio de clientes
+import 'package:Paw_authority/models/Client.dart'; 
+import 'package:Paw_authority/services/client_service.dart'; 
 import 'package:provider/provider.dart';
-import 'package:Paw_authority/UI/background_image.dart'; // Importa el fondo de pantalla
-import 'edit_clientes.dart'; // Importa la pantalla de edición
+import 'package:Paw_authority/UI/background_image.dart'; 
 
 class Clientes extends StatefulWidget {
   const Clientes({super.key});
@@ -86,14 +84,13 @@ class _ClientesState extends State<Clientes> {
     // Obtener el ancho de la pantalla
     double screenWidth = MediaQuery.of(context).size.width;
 
-    // Ajustar el tamaño máximo de cada ítem según el tamaño de la pantalla
     double maxCrossAxisExtent = screenWidth < 600 ? 150 : 200;
 
     return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
-            child: const BackgroundImage(imagen: "huron.png"), // Imagen de fondo
+            child: const BackgroundImage(imagen: "huron.png"), 
           ),
           Column(
             children: [
@@ -179,6 +176,13 @@ class _ClientesState extends State<Clientes> {
                   _obtenerClientes(); // Refresca la lista tras añadir un cliente
                 },
                 child: Text("Añadir Cliente"),
+              ),
+              SizedBox(height: 20), // Espaciado antes del botón de volver
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Volver a la pantalla anterior
+                },
+                child: Text("Volver"),
               ),
             ],
           ),
